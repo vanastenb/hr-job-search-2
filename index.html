@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HR Jobs — St. Petersburg, FL</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand: #f5efe6;
+      --sky: #2a6fa8;
+      --sky-dark: #1a4f7a;
+      --sky-light: #d6eaf8;
+      --gulf: #1d8a8a;
+      --gulf-light: #e0f5f5;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --border: #e2d9ce;
+      --accent: #e8734a;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Wavy header background */
+    header {
+      background: linear-gradient(135deg, var(--sky-dark) 0%, var(--sky) 50%, var(--gulf) 100%);
+      padding: 2.5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0; right: 0;
+      height: 60px;
+      background: var(--sand);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    header .inner {
+      max-width: 760px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    header .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      color: rgba(255,255,255,0.8);
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 4rem;
+    }
+
+    /* API Key section */
+    .api-key-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .api-key-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+    .api-key-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .api-key-row {
+      display: flex;
+      gap: 8px;
+    }
+    .api-key-row input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      background: var(--sand);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .api-key-row input:focus { border-color: var(--sky); }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--sky);
+      color: #fff;
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--sky-dark); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--border); }
+
+    /* Key confirmed badge */
+    .key-confirmed {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--gulf-light);
+      border: 1px solid var(--gulf);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: var(--gulf);
+    }
+
+    /* Search box */
+    .search-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .search-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .chip {
+      padding: 5px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: var(--sand);
+      transition: all 0.15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .chip:hover, .chip.active {
+      background: var(--sky-light);
+      border-color: var(--sky);
+      color: var(--sky-dark);
+    }
+    .search-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .search-input-row textarea {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      resize: none;
+      outline: none;
+      background: var(--sand);
+      transition: border-color 0.2s;
+      min-height: 52px;
+      line-height: 1.5;
+    }
+    .search-input-row textarea:focus { border-color: var(--sky); }
+
+    /* Messages / chat */
+    .messages {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .msg-user {
+      align-self: flex-end;
+      background: var(--sky);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 16px 16px 4px 16px;
+      max-width: 80%;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .msg-agent {
+      align-self: flex-start;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .msg-agent-inner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px 16px 16px 16px;
+      padding: 1.2rem 1.4rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Job cards inside agent message */
+    .job-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 1rem;
+    }
+    .job-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      background: var(--sand);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .job-card:hover {
+      border-color: var(--sky);
+      box-shadow: 0 4px 16px rgba(42,111,168,0.1);
+    }
+    .job-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .job-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--sky-dark);
+    }
+    .job-company {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .job-location {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .job-desc {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .job-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .job-tag {
+      background: var(--sky-light);
+      color: var(--sky-dark);
+      font-size: 0.75rem;
+      padding: 2px 9px;
+      border-radius: 20px;
+    }
+    .job-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--gulf);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .job-link:hover { text-decoration: underline; }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px 16px 16px 16px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .dots span {
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--sky);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .dots span:nth-child(2) { animation-delay: 0.2s; }
+    .dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Status bar */
+    .status-searching {
+      font-size: 0.8rem;
+      color: var(--gulf);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .pulse {
+      width: 8px; height: 8px;
+      background: var(--gulf);
+      border-radius: 50%;
+      animation: pulse 1.4s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* Welcome empty state */
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .empty-state p { font-size: 0.9rem; max-width: 360px; margin: 0 auto; }
+
+    /* Summary text formatting */
+    .msg-agent-inner h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--sky-dark);
+    }
+    .msg-agent-inner p { margin-bottom: 0.6rem; }
+
+    @media (max-width: 480px) {
+      .search-input-row { flex-direction: column; }
+      .api-key-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useRef, useEffect } = React;
+
+const QUICK_SEARCHES = [
+  "HR Manager",
+  "HR Generalist",
+  "HR Coordinator",
+  "Recruiter",
+  "HR Director",
+  "Talent Acquisition",
+  "Benefits Specialist",
+  "HRIS Analyst",
+];
+
+const SYSTEM_PROMPT = `You are an expert HR job search agent specializing in the St. Petersburg, Florida area (including Tampa Bay, Clearwater, Largo, Pinellas County, and surrounding areas).
+
+When the user asks about HR jobs, use your web search tool to find CURRENT job listings. Search multiple sources including Indeed, LinkedIn, Glassdoor, ZipRecruiter, and company career pages.
+
+After searching, respond with:
+1. A brief summary of what you found
+2. A JSON block (wrapped in <JOBS>...</JOBS> tags) containing an array of job objects with this structure:
+{
+  "title": "Job Title",
+  "company": "Company Name",
+  "location": "City, FL (or Remote)",
+  "type": "Full-time / Part-time / Contract / Remote",
+  "salary": "$XX,XXX - $XX,XXX/yr (if available, otherwise null)",
+  "description": "2-3 sentence summary of key responsibilities",
+  "tags": ["tag1", "tag2"],
+  "applyUrl": "URL to job posting (if found)",
+  "postedDate": "X days ago or date (if available)"
+}
+
+Always return 3-8 jobs. Be accurate and only include jobs you actually found. Focus on the St. Petersburg FL / Tampa Bay area unless the user asks for remote.`;
+
+function parseAgentResponse(text) {
+  const jobsMatch = text.match(/<JOBS>([\s\S]*?)<\/JOBS>/);
+  let jobs = [];
+  let summary = text;
+
+  if (jobsMatch) {
+    try {
+      const raw = jobsMatch[1].trim();
+      const parsed = JSON.parse(raw);
+      jobs = Array.isArray(parsed) ? parsed : [];
+      summary = text.replace(/<JOBS>[\s\S]*?<\/JOBS>/, '').trim();
+    } catch (e) {
+      // parsing failed, show raw
+    }
+  }
+  return { summary, jobs };
+}
+
+function JobCard({ job }) {
+  return (
+    <div className="job-card">
+      <div className="job-card-top">
+        <div>
+          <div className="job-title">{job.title}</div>
+          <div className="job-company">{job.company}</div>
+          <div className="job-location">📍 {job.location}{job.type ? ` · ${job.type}` : ''}{job.salary ? ` · ${job.salary}` : ''}</div>
+        </div>
+        {job.postedDate && <span style={{fontSize:'0.75rem',color:'#9ca3af',whiteSpace:'nowrap',marginLeft:'8px'}}>{job.postedDate}</span>}
+      </div>
+      {job.description && <p className="job-desc">{job.description}</p>}
+      {job.tags && job.tags.length > 0 && (
+        <div className="job-tags">
+          {job.tags.map((t, i) => <span key={i} className="job-tag">{t}</span>)}
+        </div>
+      )}
+      {job.applyUrl && job.applyUrl !== 'null' && (
+        <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" className="job-link">
+          View & Apply →
+        </a>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  const [apiKey, setApiKey] = useState('');
+  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [searchStatus, setSearchStatus] = useState('');
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, loading]);
+
+  const saveKey = () => {
+    if (apiKeyInput.startsWith('sk-ant-')) {
+      setApiKey(apiKeyInput.trim());
+      setApiKeyInput('');
+    } else {
+      alert('Please enter a valid Anthropic API key (starts with sk-ant-)');
+    }
+  };
+
+  const sendMessage = async (text) => {
+    if (!text.trim() || loading || !apiKey) return;
+
+    const userMsg = { role: 'user', content: text.trim() };
+    const newHistory = [...messages, userMsg];
+    setMessages(newHistory);
+    setInput('');
+    setLoading(true);
+    setSearchStatus('Searching job boards...');
+
+    try {
+      const payload = {
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: SYSTEM_PROMPT,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: newHistory.map(m => ({ role: m.role, content: m.content })),
+      };
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error?.message || `API error ${res.status}`);
+      }
+
+      const data = await res.json();
+      setSearchStatus('');
+
+      // Extract text from content blocks
+      const fullText = data.content
+        .filter(b => b.type === 'text')
+        .map(b => b.text)
+        .join('\n');
+
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: fullText,
+      }]);
+    } catch (err) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ Error: ${err.message}. Please check your API key and try again.`,
+      }]);
+    } finally {
+      setLoading(false);
+      setSearchStatus('');
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
+    }
+  };
+
+  const quickSearch = (term) => {
+    const query = `Find ${term} jobs in St. Petersburg FL and nearby areas`;
+    sendMessage(query);
+  };
+
+  return (
+    <>
+      <header>
+        <div className="inner">
+          <div className="badge">🌴 Powered by Claude AI</div>
+          <h1>HR Job Search<br/>St. Petersburg, FL</h1>
+          <p>AI-powered agent searching Indeed, LinkedIn, Glassdoor & more</p>
+        </div>
+      </header>
+
+      <main>
+        {/* API Key */}
+        <div className="api-key-card">
+          {apiKey ? (
+            <div className="key-confirmed">
+              <span>✓ Anthropic API key connected</span>
+              <button className="btn btn-ghost btn-sm" onClick={() => setApiKey('')}>Change key</button>
+            </div>
+          ) : (
+            <>
+              <h3>Connect your Anthropic API Key</h3>
+              <p>Your key stays in this browser session only and is never stored. Get one at <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--sky)'}}>console.anthropic.com</a></p>
+              <div className="api-key-row">
+                <input
+                  type="password"
+                  placeholder="sk-ant-..."
+                  value={apiKeyInput}
+                  onChange={e => setApiKeyInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && saveKey()}
+                />
+                <button className="btn btn-primary" onClick={saveKey}>Connect</button>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Search */}
+        <div className="search-card">
+          <span className="search-label">Quick search by role</span>
+          <div className="quick-chips">
+            {QUICK_SEARCHES.map(term => (
+              <button
+                key={term}
+                className="chip"
+                disabled={loading || !apiKey}
+                onClick={() => quickSearch(term)}
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+          <span className="search-label">Or ask anything</span>
+          <div className="search-input-row">
+            <textarea
+              placeholder='e.g. "Remote HR coordinator near Tampa Bay" or "Entry-level HR with $45k+ salary"'
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={2}
+              disabled={loading || !apiKey}
+            />
+            <button
+              className="btn btn-primary"
+              onClick={() => sendMessage(input)}
+              disabled={loading || !input.trim() || !apiKey}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div className="messages">
+          {messages.length === 0 && !loading && (
+            <div className="empty-state">
+              <div className="icon">🌊</div>
+              <h3>Find Your Next HR Role</h3>
+              <p>Connect your API key above, then click a role or type your search to get started.</p>
+            </div>
+          )}
+
+          {messages.map((msg, i) => {
+            if (msg.role === 'user') {
+              return <div key={i} className="msg-user">{msg.content}</div>;
+            }
+            const { summary, jobs } = parseAgentResponse(msg.content);
+            return (
+              <div key={i} className="msg-agent">
+                <div className="msg-agent-inner">
+                  {summary && <p style={{whiteSpace:'pre-wrap'}}>{summary}</p>}
+                  {jobs.length > 0 && (
+                    <div className="job-grid">
+                      {jobs.map((job, j) => <JobCard key={j} job={job} />)}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+
+          {loading && (
+            <div className="msg-agent">
+              <div className="loading">
+                {searchStatus && (
+                  <span className="status-searching">
+                    <span className="pulse"></span>
+                    {searchStatus}
+                  </span>
+                )}
+                <div className="dots">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+      </main>
+    </>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+</script>
+</body>
+</html>
